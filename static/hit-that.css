@@ -1,12 +1,31 @@
-button {
-  height: 30px;
-  width: 30px;
-  outline: none;
-  margin: 10px;
-  border: none;
-  border-radius: 2px;
+
+/* #_hit_that_input_window_ {
+  display: block;
+  width: 300px;
+  height: 40px;
+  background: gray;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 99999999;
+} */
+
+#_hit_that_input_window_ {
+  display: block;
+  width: 300px;
+  height: 40px;
+  background: gray;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 99999999;
 }
 
-button.current {
-  box-shadow: 0 0 0 2px white, 0 0 0 4px black;
+#_hit_that_fuzzy_search_ {
+  height: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  padding-left: 5px;
 }

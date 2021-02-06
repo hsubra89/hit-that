@@ -1,26 +1,46 @@
 {
-    "name": "Hit That!",
-    "description": "Better keyboard navigation",
-    "version": "0.0.1",
-    "manifest_version": 3,
-    "background": {
-      "service_worker": "dist/hit_that_slave.js"
-    },
-    "permissions": ["storage", "activeTab", "scripting"],
-    "action": {
-      "default_popup": "static/popup.html",
-      "default_icon": {
-        "16": "/images/get_started16.png",
-        "32": "/images/get_started32.png",
-        "48": "/images/get_started48.png",
-        "128": "/images/get_started128.png"
-      }
-    },
-    "icons": {
-      "16": "/images/get_started16.png",
-      "32": "/images/get_started32.png",
-      "48": "/images/get_started48.png",
-      "128": "/images/get_started128.png"
-    },
-    "options_page": "options.html"
-  }
+  "name": "Hit That!",
+  "description": "Better keyboard navigation",
+  "version": "0.0.1",
+  "manifest_version": 3,
+
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "author": "Harish Subramanium <hsubra89@gmail.com>",
+  "action": {
+    "default_popup": "/static/popup.html",
+    "default_title": "Hit that!",
+    "default_icon": {
+      "16": "/static/images/get_started16.png",
+      "32": "/static/images/get_started32.png",
+      "48": "/static/images/get_started48.png",
+      "128": "/static/images/get_started128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "css": [
+        "/static/hit-that.css"
+      ],
+      "js": [
+        "/dist/main.js"
+      ],
+      "match_about_blank": false
+    }
+  ],
+  "icons": {
+    "16": "/static/images/get_started16.png",
+    "32": "/static/images/get_started32.png",
+    "48": "/static/images/get_started48.png",
+    "128": "/static/images/get_started128.png"
+  },
+  "options_page": "/static/options.html"
+}
