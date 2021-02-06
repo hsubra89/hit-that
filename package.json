@@ -1,0 +1,12 @@
+{
+  "name": "hit-that",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "Harish Subramanium <hsubra89@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@types/chrome": "^0.0.129",
+    "typescript": "^4.1.3"
+  }
+}
