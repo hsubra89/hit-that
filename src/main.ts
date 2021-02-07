@@ -1,5 +1,5 @@
 
-import { dropWhile, getDistanceAndResult } from './utils'
+import { scoreBetweenCharArrays } from './utils'
 
 let enabled = false
 
@@ -28,7 +28,7 @@ function enableFuzzyLinkSearch(e: KeyboardEvent) {
     .from(document.getElementsByTagName('a'))
     .map(a => {
 
-      const title = a.innerText
+      const title = a.innerText.trim().toLowerCase()
       const url = a.href
 
       return {
@@ -45,52 +45,31 @@ function enableFuzzyLinkSearch(e: KeyboardEvent) {
     // Get value from the input
     const value = (event.target as HTMLInputElement).value
 
-    if(value.length <= 1) {
+    if (value.length <= 1) {
       return
     }
 
-    const valueChars = value.trim().split('')
+    const valueChars = value.trim().toLowerCase().split('')
 
     // Convert the input into a shortlist of anchors
     // that match the pattern
-    const r = value.trim().split('').join('.*')
-    const regex = new RegExp(r, 'i')
+    const r = valueChars.join('.*')
+    const regex = new RegExp(r)
     const shortlist = anchors.filter(x => regex.test(x.title))
 
+    // Now find the distance between characters in the shortlist and score the shortlist
     const scores = shortlist
-      .map(x => ({ ...x, score: scoreBetweenStrings(valueChars, x.title) }))
+      .map(x => ({ ...x, score: scoreBetweenCharArrays(x.title.split(''), valueChars) }))
       .sort((a, b) => a.score - b.score)
 
-    // Now find the distance between characters in the shortlist and score the shortlist
+    console.log(`-------------------------------------------------------------------`)
     console.log(scores)
+    console.log(scores.slice(0, 10).map(x => x.title).join('  '))
+    console.log(`-------------------------------------------------------------------`)
   }
 
   setTimeout(() => showQuickSearchInputBoxWithFocus(eventHandler), 0)
   enabled = true
-}
-
-
-
-// This is a logical scoring of distance between the char ordering
-// We could use algorithms like levenshtein distance, but they don't
-// seem like they would solve the problem.
-function scoreBetweenStrings(charOrder: string[], target: string) {
-
-  const srcString = target.split('')
-  const char = charOrder.shift()
-  const filtered = dropWhile(srcString, x => x != char)
-
-  let score = 0
-  let arr = filtered
-
-  while(charOrder.length) {
-    const char = charOrder.shift()
-    const result = getDistanceAndResult(arr, x => x != char)
-    score += result.count
-    arr = result.arr
-  }
-
-  return score
 }
 
 const HIT_INPUT_WINDOW_ID = `_hit_that_input_window_`
