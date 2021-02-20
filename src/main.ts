@@ -5,8 +5,11 @@ let enabled = false
 
 document.body.addEventListener('keydown', event => {
   switch (event.code) {
-    case 'KeyF':
+    case 'KeyE':
       enableFuzzyLinkSearch(event)
+      break
+    case 'Enter':
+      potentiallyNavigate()
       break
     case 'Escape':
       disableFuzzyLinkSearch()
@@ -16,9 +19,27 @@ document.body.addEventListener('keydown', event => {
   }
 })
 
+const IGNORE_NODE_NAMES: Set<string> = new Set(['TEXTAREA', 'INPUT', 'SELECT'])
+
+function isNodeInput(e: HTMLElement): boolean {
+  return e.isContentEditable || IGNORE_NODE_NAMES.has(e.nodeName.toUpperCase())
+}
+
+type LinkElements = {
+  url: string
+  title: string
+  anchor: HTMLAnchorElement
+}
+
 function enableFuzzyLinkSearch(e: KeyboardEvent) {
 
   if (enabled) {
+    return
+  }
+
+  const target = e.target as HTMLElement
+
+  if(isNodeInput(target)) {
     return
   }
 
@@ -38,7 +59,7 @@ function enableFuzzyLinkSearch(e: KeyboardEvent) {
       }
     })
 
-  const eventHandler: EventListener = (event: any) => {
+  const eventHandler: EventListener = (event: Event) => {
     event.preventDefault()
     event.stopPropagation()
 
@@ -46,6 +67,7 @@ function enableFuzzyLinkSearch(e: KeyboardEvent) {
     const value = (event.target as HTMLInputElement).value
 
     if (value.length <= 1) {
+      refitHighlights([])
       return
     }
 
@@ -62,14 +84,33 @@ function enableFuzzyLinkSearch(e: KeyboardEvent) {
       .map(x => ({ ...x, score: scoreBetweenCharArrays(x.title.split(''), valueChars) }))
       .sort((a, b) => a.score - b.score)
 
-    console.log(`-------------------------------------------------------------------`)
-    console.log(scores)
-    console.log(scores.slice(0, 10).map(x => x.title).join('  '))
-    console.log(`-------------------------------------------------------------------`)
+    refitHighlights(scores)
   }
 
   setTimeout(() => showQuickSearchInputBoxWithFocus(eventHandler), 0)
   enabled = true
+}
+
+
+let fuzzySearchResults: LinkElements[] = []
+
+const HIGHLIGHT_CLASS = 'hit-that-highlight'
+const HIGHLIGHT_CLASS_PRIMARY = 'hit-that-highlight-primary'
+
+function refitHighlights(newHighlightList: LinkElements[]) {
+
+  fuzzySearchResults
+    .forEach((elem, index) => {
+      elem.anchor.classList.remove(index === 0 ? HIGHLIGHT_CLASS_PRIMARY : HIGHLIGHT_CLASS)
+    })
+
+  fuzzySearchResults = []
+
+  newHighlightList.forEach((elem, index) => {
+    elem.anchor.classList.add(index === 0 ? HIGHLIGHT_CLASS_PRIMARY : HIGHLIGHT_CLASS)
+  })
+
+  fuzzySearchResults = newHighlightList
 }
 
 const HIT_INPUT_WINDOW_ID = `_hit_that_input_window_`
@@ -94,5 +135,12 @@ function disableFuzzyLinkSearch() {
     (element as any as HTMLDivElement).remove()
   }
 
+  refitHighlights([])
   enabled = false
+}
+
+function potentiallyNavigate() {
+  if(enabled && fuzzySearchResults.length > 0) {
+    fuzzySearchResults[0].anchor.click()
+  }
 }
