@@ -5,7 +5,7 @@ let enabled = false
 
 document.body.addEventListener('keydown', event => {
   switch (event.code) {
-    case 'KeyE':
+    case 'Semicolon':
       enableFuzzyLinkSearch(event)
       break
     case 'Enter':
