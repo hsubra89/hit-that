@@ -89,6 +89,9 @@ export class DOMStateMachine implements StateMachine {
           anchor: a
         }
       })
+      // Filter out links without titles because we can't use
+      // fuzzy-search to get to them
+      .filter(a => a.title !== '')
 
     this.state = new FuzzySearchState(links)
   }
