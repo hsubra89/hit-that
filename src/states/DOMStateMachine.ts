@@ -1,6 +1,7 @@
-import { FuzzySearchState } from './states/FuzzySearchState'
-import { NoState } from './states/NoState'
-import { StateMachine } from './states/state-utils'
+import { FuzzySearchState } from './FuzzySearchState'
+import { HitHintState } from './HitHintState'
+import { NoState } from './NoState'
+import { StateMachine } from './state-utils'
 
 const IGNORE_NODE_NAMES: Set<string> = new Set(['TEXTAREA', 'INPUT', 'SELECT'])
 
@@ -33,22 +34,34 @@ export class DOMStateMachine implements StateMachine {
     }
   }
 
+  isHitHintState = (state: StateMachine): state is HitHintState => {
+    if (state instanceof HitHintState) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   navigateToPrimaryLink = () => {
+
     if (this.isFuzzySearch(this.state)) {
       this.state.navigateToPrimaryLink()
     }
 
+    // Reset state before attempting navigation.
     this.state.resetState()
   }
 
-  fuzzyNext = () => {
+  fuzzyNext = (event: KeyboardEvent) => {
     if (this.isFuzzySearch(this.state)) {
+      event.preventDefault()
       this.state.highlightNext()
     }
   }
 
-  fuzzyPrevious = () => {
+  fuzzyPrevious = (event: KeyboardEvent) => {
     if (this.isFuzzySearch(this.state)) {
+      event.preventDefault()
       this.state.highlightPrevious()
     }
   }
@@ -63,22 +76,31 @@ export class DOMStateMachine implements StateMachine {
 
     keyboardEvent.preventDefault()
 
-    const anchors = Array
-      .from(document.getElementsByTagName('a'))
+    const buttons = Array.from(document.getElementsByTagName('button'))
+    const anchors = Array.from(document.getElementsByTagName('a'))
+
+    const links = [...buttons, ...anchors]
       .map(a => {
 
         const title = a.innerText.trim().toLowerCase()
-        const url = a.href
 
         return {
-          url,
           title,
           anchor: a
         }
       })
 
-    setTimeout(() => {
-      this.state = new FuzzySearchState(anchors)
-    }, 0)
+    this.state = new FuzzySearchState(links)
+  }
+
+  enableHitHintState = (keyboardEvent: KeyboardEvent) => {
+
+    const targetElement = keyboardEvent.target as HTMLElement
+
+    if (!this.isInactive(this.state) || isNodeInput(targetElement)) {
+      return
+    }
+
+    this.state = new HitHintState()
   }
 }

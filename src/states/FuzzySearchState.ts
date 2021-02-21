@@ -60,7 +60,15 @@ export class FuzzySearchState implements StateMachine {
 
   navigateToPrimaryLink = () => {
     if (this.linkResults.length > 0) {
-      this.linkResults[0].anchor.click()
+      const a = this.linkResults[0].anchor
+      this.resetState()
+
+      // We want to run this on nextTick, so that
+      // local state can be reset appropriately
+      setTimeout(() => {
+        a.click()
+      }, 0)
+
     }
   }
 
