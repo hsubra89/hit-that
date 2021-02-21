@@ -7,6 +7,14 @@ document.body.addEventListener('keydown', event => {
     case 'Semicolon':
       domState.enableFuzzySearchState(event)
       break
+    case 'ArrowDown':
+      event.preventDefault()
+      domState.fuzzyNext()
+      break
+    case 'ArrowUp':
+      event.preventDefault()
+      domState.fuzzyPrevious()
+      break
     case 'Enter':
       domState.navigateToPrimaryLink()
       break

@@ -46,12 +46,13 @@ export class FuzzySearchState implements StateMachine {
     linkElements: NoOp
   }
 
+  linkResults: LinkElements[] = []
+
   resetState = () => {
     this.state.searchInputBox = this.state.searchInputBox()
     this.state.linkElements = this.state.linkElements()
+    this.linkResults = []
   }
-
-  linkResults: LinkElements[] = []
 
   constructor(private anchors: LinkElements[]) {
     this.state.searchInputBox = showQuickSearchInputBoxWithFocus(this.eventHandler)
@@ -61,6 +62,29 @@ export class FuzzySearchState implements StateMachine {
     if (this.linkResults.length > 0) {
       this.linkResults[0].anchor.click()
     }
+  }
+
+  highlightPrevious = () => {
+    if (this.linkResults.length > 0) {
+      const [head, ...tail] = this.linkResults.slice().reverse()
+      this.updateHighlights(tail.concat(head).reverse())
+    }
+  }
+
+  highlightNext = () => {
+    if (this.linkResults.length > 0) {
+      const [head, ...tail] = this.linkResults
+      this.updateHighlights(tail.concat(head))
+    }
+  }
+
+  updateHighlights(newHighlights: LinkElements[]) {
+    // Clear out existing highlights
+    this.state.linkElements()
+
+    // Highlight newer results
+    this.linkResults = newHighlights
+    this.state.linkElements = highlightLinkElements(newHighlights)
   }
 
   eventHandler: EventListener = (event: Event) => {
@@ -83,13 +107,12 @@ export class FuzzySearchState implements StateMachine {
       const shortlist = this.anchors.filter(x => regex.test(x.title))
 
       // Now find the distance between characters in the shortlist and score the shortlist
-      this.linkResults = shortlist
+      const results = shortlist
         .map(x => ({ ...x, score: scoreBetweenCharArrays(x.title.split(''), valueChars) }))
         .sort((a, b) => a.score - b.score)
 
       // Reset previous state and highlight new elements
-      this.state.linkElements()
-      this.state.linkElements = highlightLinkElements(this.linkResults)
+      this.updateHighlights(results)
     }
   }
 }

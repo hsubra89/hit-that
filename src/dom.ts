@@ -37,6 +37,20 @@ export class DOMStateMachine implements StateMachine {
     if (this.isFuzzySearch(this.state)) {
       this.state.navigateToPrimaryLink()
     }
+
+    this.state.resetState()
+  }
+
+  fuzzyNext = () => {
+    if (this.isFuzzySearch(this.state)) {
+      this.state.highlightNext()
+    }
+  }
+
+  fuzzyPrevious = () => {
+    if (this.isFuzzySearch(this.state)) {
+      this.state.highlightPrevious()
+    }
   }
 
   enableFuzzySearchState = (keyboardEvent: KeyboardEvent) => {
