@@ -16,7 +16,7 @@
   height: 40px;
   background: gray;
   position: fixed;
-  top: 20px;
+  bottom: 20px;
   right: 20px;
   z-index: 99999999;
 }
@@ -30,10 +30,10 @@
   padding-left: 5px;
 }
 
-.hit-that-highlight-primary {
+._hit-that-highlight-primary_ {
   background: yellow !important;
 }
 
-.hit-that-highlight {
+._hit-that-highlight_ {
   background: lightcyan;
 }
