@@ -1,24 +1,29 @@
 
-/* #_hit_that_input_window_ {
-  display: block;
-  width: 300px;
-  height: 40px;
-  background: gray;
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 99999999;
-} */
+@keyframes flyup {
+  from { bottom: -20px ; }
+  to { bottom: 20px; }
+}
 
 #_hit_that_input_window_ {
   display: block;
-  width: 300px;
-  height: 40px;
-  background: gray;
   position: fixed;
-  bottom: 20px;
-  right: 20px;
   z-index: 99999999;
+
+  width: 300px;
+  height: 46px;
+  right: 20px;
+  bottom: 20px;
+
+  padding: 1px 1px 0 16px;
+
+  animation-name: flyup;
+  animation-duration: 0.1s;
+
+  background: rgb(51, 51, 51);
+  background-clip: border-box;
+  border: 1px rgb(51, 51, 51) solid;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px 0px;
 }
 
 #_hit_that_fuzzy_search_ {
@@ -26,8 +31,14 @@
   width: 100%;
   border: none;
   outline: none;
-  box-sizing: border-box;
+  color: rgb(238, 238, 238);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
   padding-left: 5px;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0);
+  background-clip: border-box;
 }
 
 ._hit-that-highlight-primary_ {
