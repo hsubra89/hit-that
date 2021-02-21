@@ -16,10 +16,8 @@ function findVisiblePointerDOMElements(): HTMLElement[] {
       if (
         x instanceof HTMLElement
         && x.offsetParent !== null
-        && !("value" in x)
+        // && !("value" in x)
         && !!(x.offsetWidth || x.offsetHeight || x.getClientRects().length)
-        && x.clientHeight !== 0
-        && x.clientWidth !== 0
       ) {
         const style = window.getComputedStyle(x)
         return style.cursor === 'pointer'
@@ -134,7 +132,7 @@ export class DOMStateMachine implements StateMachine {
 
     keyboardEvent.preventDefault()
 
-    const links = removeNestedPointerElements(findVisiblePointerDOMElements())
+    const links = findVisiblePointerDOMElements()
       .map(a => {
 
         const title = a.innerText.trim().toLowerCase()
