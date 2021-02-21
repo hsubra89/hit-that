@@ -114,6 +114,7 @@ export class FuzzySearchState implements StateMachine {
       // Now find the distance between characters in the shortlist and score the shortlist
       const results = shortlist
         .map(x => ({ ...x, score: scoreBetweenCharArrays(x.title.split(''), valueChars) }))
+        .filter(a => a.score != Infinity)
         .sort((a, b) => a.score - b.score)
 
       // Reset previous state and highlight new elements
