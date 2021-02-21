@@ -48,8 +48,7 @@ export class DOMStateMachine implements StateMachine {
       this.state.navigateToPrimaryLink()
     }
 
-    // Reset state before attempting navigation.
-    this.state.resetState()
+    this.resetState()
   }
 
   fuzzyNext = (event: KeyboardEvent) => {

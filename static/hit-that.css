@@ -42,9 +42,9 @@
 }
 
 ._hit-that-highlight-primary_ {
-  background: yellow !important;
+  background: rgba(225, 225, 0, 0.5) !important;
 }
 
 ._hit-that-highlight_ {
-  background: lightcyan;
+  background: rgba(224, 225, 225, 0.5);
 }

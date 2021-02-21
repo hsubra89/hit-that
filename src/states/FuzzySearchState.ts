@@ -64,11 +64,8 @@ export class FuzzySearchState implements StateMachine {
       this.resetState()
 
       // We want to run this on nextTick, so that
-      // local state can be reset appropriately
-      setTimeout(() => {
-        a.click()
-      }, 0)
-
+      // local state can be updated appropriately.
+      setTimeout(() => a.click(), 0)
     }
   }
 
