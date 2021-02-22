@@ -132,7 +132,7 @@ export class DOMStateMachine implements StateMachine {
 
     keyboardEvent.preventDefault()
 
-    const links = findVisiblePointerDOMElements()
+    const links = removeNestedPointerElements(findVisiblePointerDOMElements())
       .map(a => {
 
         const title = a.innerText.trim().toLowerCase()

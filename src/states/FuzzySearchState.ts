@@ -39,6 +39,25 @@ function highlightLinkElements(newHighlightList: LinkElements[]) {
   }
 }
 
+function partition<T>(elems: T[], predicate: (x: T) => boolean): [T[], T[]] {
+
+  const truthy: T[] = []
+  const falsy: T[] = []
+  const arr = elems.slice()
+
+  let elem: T | undefined
+
+  while (elem = arr.shift()) {
+    if (predicate(elem)) {
+      truthy.push(elem)
+    } else {
+      falsy.push(elem)
+    }
+  }
+
+  return [truthy, falsy]
+}
+
 export class FuzzySearchState implements StateMachine {
 
   state = {
@@ -97,19 +116,21 @@ export class FuzzySearchState implements StateMachine {
     event.stopPropagation()
 
     // Get value from the input
-    const value = (event.target as HTMLInputElement).value
+    const value = (event.target as HTMLInputElement).value.trim().toLowerCase()
 
     if (value.length <= 1) {
       this.state.linkElements = this.state.linkElements()
     } else {
 
-      const valueChars = value.trim().toLowerCase().split('')
+      const [perfectMatch, toFuzzyMatch] = partition(this.anchors, x => x.title.includes(value))
+
+      const valueChars = value.split('')
 
       // Convert the input into a shortlist of anchors
       // that match the pattern
       const r = valueChars.join('.*')
       const regex = new RegExp(r)
-      const shortlist = this.anchors.filter(x => regex.test(x.title))
+      const shortlist = toFuzzyMatch.filter(x => regex.test(x.title))
 
       // Now find the distance between characters in the shortlist and score the shortlist
       const results = shortlist
@@ -118,7 +139,7 @@ export class FuzzySearchState implements StateMachine {
         .sort((a, b) => a.score - b.score)
 
       // Reset previous state and highlight new elements
-      this.updateHighlights(results)
+      this.updateHighlights(perfectMatch.concat(results))
     }
   }
 }
