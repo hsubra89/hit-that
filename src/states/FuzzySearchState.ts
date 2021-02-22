@@ -120,6 +120,7 @@ export class FuzzySearchState implements StateMachine {
 
     if (value.length <= 1) {
       this.state.linkElements = this.state.linkElements()
+      this.linkResults = []
     } else {
 
       const [perfectMatch, toFuzzyMatch] = partition(this.anchors, x => x.title.includes(value))
