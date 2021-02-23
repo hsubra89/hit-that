@@ -16,6 +16,14 @@ document.body.addEventListener('keydown', event => {
     case 'ArrowUp':
       domState.fuzzyPrevious(event)
       break
+    case 'Tab':
+      // Mimic classic tab navigation behaviour
+      if(event.shiftKey) {
+        domState.fuzzyPrevious(event)
+      } else {
+        domState.fuzzyNext(event)
+      }
+      break
     case 'Enter':
       domState.navigateToPrimaryLink()
       break

@@ -88,10 +88,15 @@ export class FuzzySearchState implements StateMachine {
     }
   }
 
+  scrollElementIntoView = (e: HTMLElement) => {
+    e.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' })
+  }
+
   highlightPrevious = () => {
     if (this.linkResults.length > 0) {
       const [head, ...tail] = this.linkResults.slice().reverse()
       this.updateHighlights(tail.concat(head).reverse())
+      this.scrollElementIntoView(this.linkResults[0].anchor)
     }
   }
 
@@ -99,6 +104,7 @@ export class FuzzySearchState implements StateMachine {
     if (this.linkResults.length > 0) {
       const [head, ...tail] = this.linkResults
       this.updateHighlights(tail.concat(head))
+      this.scrollElementIntoView(this.linkResults[0].anchor)
     }
   }
 

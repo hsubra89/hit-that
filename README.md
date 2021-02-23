@@ -11,3 +11,7 @@ The unpacked extension will be located within the newly generated "/dist" folder
 - Inut a term you find on any link on the page.
 - Press 'Enter' to navigate to the highlighted link.
 - Use up-arrow or down-arrow keys to navigate between search results.
+
+
+# Things to do
+- Change css style to highlight links instead of changing the background of the link.
