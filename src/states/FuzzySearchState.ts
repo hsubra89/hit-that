@@ -89,7 +89,7 @@ export class FuzzySearchState implements StateMachine {
   }
 
   scrollElementIntoView = (e: HTMLElement) => {
-    e.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' })
+    e.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'nearest' })
   }
 
   highlightPrevious = () => {

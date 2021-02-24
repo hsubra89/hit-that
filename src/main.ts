@@ -1,3 +1,4 @@
+import './hit-that.css'
 import { DOMStateMachine } from "./states/DOMStateMachine"
 
 const domState = new DOMStateMachine()

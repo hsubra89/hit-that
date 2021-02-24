@@ -14,7 +14,6 @@
   },
   "author": "Harish Subramanium <hsubra89@gmail.com>",
   "action": {
-
     "default_title": "Hit that!",
     "default_icon": {
       "16": "/images/get_started16.png",
@@ -30,7 +29,7 @@
         "https://*/*"
       ],
       "css": [
-        "/hit-that.css"
+        "./main.css"
       ],
       "js": [
         "/main.js"
