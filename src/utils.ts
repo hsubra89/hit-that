@@ -48,3 +48,21 @@ export function scoreBetweenCharArrays(target: string[], charOrder: string[]) {
   return score
 }
 
+export function partition<T>(elems: T[], predicate: (x: T) => boolean): [T[], T[]] {
+
+  const truthy: T[] = []
+  const falsy: T[] = []
+  const arr = elems.slice()
+
+  let elem: T | undefined
+
+  while (elem = arr.shift()) {
+    if (predicate(elem)) {
+      truthy.push(elem)
+    } else {
+      falsy.push(elem)
+    }
+  }
+
+  return [truthy, falsy]
+}
